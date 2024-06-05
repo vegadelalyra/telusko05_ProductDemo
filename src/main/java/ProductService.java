@@ -1,33 +1,40 @@
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductService {
 
-    List<Product> products = new ArrayList<>();
+    ProductDB productDB = new ProductDB();
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public boolean addProduct(Product product) {
+        try {
+            return productDB.save(product);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Product> getAllProducts() {
-        return products;
-    }
-
-    public Product getProduct(String name) {
-        for (Product product : products) {
-            if (product.getName().contains(name)) {
-                return product;
-            }
+        try {
+            return productDB.getAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
-
-    public List<Product> getProductsWithText(String searchedText) {
-        return products.stream()
-                .filter(product -> product.toString().toLowerCase()
-                        .contains(searchedText.toLowerCase()))
-                .collect(Collectors.toList());
-    }
+//
+//    public Product getProduct(String name) {
+//        for (Product product : products) {
+//            if (product.getName().contains(name)) {
+//                return product;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public List<Product> getProductsWithText(String searchedText) {
+//        return products.stream()
+//                .filter(product -> product.toString().toLowerCase()
+//                        .contains(searchedText.toLowerCase()))
+//                .collect(Collectors.toList());
+//    }
 
 }
